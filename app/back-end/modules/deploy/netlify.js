@@ -5,7 +5,6 @@
 const fs = require('fs-extra');
 const path = require('path');
 const md5 = require('md5');
-const passwordSafeStorage = require('keytar');
 const netlify = require('./../custom-changes/netlify');
 const slug = require('./../../helpers/slug');
 
@@ -25,13 +24,13 @@ class Netlify {
         let token = this.deployment.siteConfig.deployment.netlify.token;
         let account = slug(this.deployment.siteConfig.name);
 
-        if(siteID === 'publii-netlify-id ' + account) {
-            siteID = await passwordSafeStorage.getPassword('publii-netlify-id', account);
-        }
+        // if(siteID === 'publii-netlify-id ' + account) {
+        //     siteID = await passwordSafeStorage.getPassword('publii-netlify-id', account);
+        // }
 
-        if(token === 'publii-netlify-token ' + account) {
-            token = await passwordSafeStorage.getPassword('publii-netlify-token', account);
-        }
+        // if(token === 'publii-netlify-token ' + account) {
+        //     token = await passwordSafeStorage.getPassword('publii-netlify-token', account);
+        // }
 
         client = netlify.createClient({
             access_token: token

@@ -5,7 +5,6 @@
 const fs = require('fs-extra');
 const path = require('path');
 const AWS = require('aws-sdk');
-const passwordSafeStorage = require('keytar');
 const slug = require('./../../helpers/slug');
 const mime = require('mime');
 
@@ -30,13 +29,13 @@ class S3 {
         this.prefix = this.deployment.siteConfig.deployment.s3.prefix;
         this.waitForTimeout = true;
 
-        if(s3Id === 'publii-s3-id ' + account) {
-            s3Id = await passwordSafeStorage.getPassword('publii-s3-id', account);
-        }
+        // if(s3Id === 'publii-s3-id ' + account) {
+        //     s3Id = await passwordSafeStorage.getPassword('publii-s3-id', account);
+        // }
 
-        if(s3Key === 'publii-s3-key ' + account) {
-            s3Key = await passwordSafeStorage.getPassword('publii-s3-key', account);
-        }
+        // if(s3Key === 'publii-s3-key ' + account) {
+        //     s3Key = await passwordSafeStorage.getPassword('publii-s3-key', account);
+        // }
 
         this.connection = new AWS.S3({
             accessKeyId: s3Id,
@@ -420,13 +419,13 @@ class S3 {
         let account = slug(siteName);
         let waitForTimeout = true;
 
-        if(s3Id === 'publii-s3-id ' + account) {
-            s3Id = await passwordSafeStorage.getPassword('publii-s3-id', account);
-        }
+        // if(s3Id === 'publii-s3-id ' + account) {
+        //     s3Id = await passwordSafeStorage.getPassword('publii-s3-id', account);
+        // }
 
-        if(s3Key === 'publii-s3-key ' + account) {
-            s3Key = await passwordSafeStorage.getPassword('publii-s3-key', account);
-        }
+        // if(s3Key === 'publii-s3-key ' + account) {
+        //     s3Key = await passwordSafeStorage.getPassword('publii-s3-key', account);
+        // }
 
         let connection = new AWS.S3({
             accessKeyId: s3Id,

@@ -1,7 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
 const slug = require('./../helpers/slug');
-const passwordSafeStorage = require('keytar');
 const ipcMain = require('electron').ipcMain;
 const Site = require('../site.js');
 const Themes = require('../themes.js');
@@ -150,75 +149,6 @@ class SiteEvents {
                 let glTokenData = false;
                 let netlifyIdData = false;
                 let netlifyTokenData = false;
-
-                // Save the password in the keychain
-                if(passwordSafeStorage) {
-                    if(config.settings.deployment.password !== '') {
-                        passwordData = await self.loadPassword(
-                            config.settings,
-                            'publii',
-                            config.settings.deployment.password
-                        );
-                        config.settings.deployment.password = passwordData.toSave;
-                    }
-
-                    if(config.settings.deployment.passphrase !== '') {
-                        passphraseData = await self.loadPassword(
-                            config.settings,
-                            'publii-passphrase',
-                            config.settings.deployment.passphrase
-                        );
-                        config.settings.deployment.passphrase = passphraseData.toSave;
-                    }
-
-                    if(config.settings.deployment.s3.id !== '' && config.settings.deployment.s3.key !== '') {
-                        s3IdData = await self.loadPassword(
-                            config.settings,
-                            'publii-s3-id',
-                            config.settings.deployment.s3.id
-                        );
-                        s3KeyData = await self.loadPassword(
-                            config.settings,
-                            'publii-s3-key',
-                            config.settings.deployment.s3.key
-                        );
-                        config.settings.deployment.s3.id = s3IdData.toSave;
-                        config.settings.deployment.s3.key = s3KeyData.toSave;
-                    }
-
-                    if(config.settings.deployment.github.token !== '') {
-                        ghTokenData = await self.loadPassword(
-                            config.settings,
-                            'publii-gh-token',
-                            config.settings.deployment.github.token
-                        );
-                        config.settings.deployment.github.token = ghTokenData.toSave;
-                    }
-
-                    if(config.settings.deployment.gitlab.token !== '') {
-                        glTokenData = await self.loadPassword(
-                            config.settings,
-                            'publii-gl-token',
-                            config.settings.deployment.gitlab.token
-                        );
-                        config.settings.deployment.gitlab.token = glTokenData.toSave;
-                    }
-
-                    if(config.settings.deployment.netlify.id !== '' && config.settings.deployment.netlify.token !== '') {
-                        netlifyIdData = await self.loadPassword(
-                            config.settings,
-                            'publii-netlify-id',
-                            config.settings.deployment.netlify.id
-                        );
-                        netlifyTokenData = await self.loadPassword(
-                            config.settings,
-                            'publii-netlify-token',
-                            config.settings.deployment.netlify.token
-                        );
-                        config.settings.deployment.netlify.id = netlifyIdData.toSave;
-                        config.settings.deployment.netlify.token = netlifyTokenData.toSave;
-                    }
-                }
 
                 // Save config
                 fs.writeFileSync(configFile, JSON.stringify(config.settings));
@@ -384,24 +314,7 @@ class SiteEvents {
     async loadPassword(settings, type, newPassword) {
         let account = slug(settings.name);
 
-        if (!settings.deployment.askforpassword || type !== 'publii') {
-            let existingPassword = await passwordSafeStorage.getPassword(type, account);
 
-            if (newPassword !== '') {
-                await passwordSafeStorage.setPassword(type, account, newPassword);
-            } else if (existingPassword !== null) {
-                // Remove the password from the storage if it still exists
-                // and user provided an empty password now
-                await passwordSafeStorage.deletePassword(type, account);
-            }
-
-            return {
-                newPassword: newPassword,
-                toSave: type + ' ' + account
-            };
-        }
-
-        await passwordSafeStorage.deletePassword(type, account);
 
         return {
             newPassword: '',

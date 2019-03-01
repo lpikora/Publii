@@ -5,7 +5,7 @@
 // Necessary packages
 const fs = require('fs-extra');
 const path = require('path');
-const passwordSafeStorage = require('keytar');
+
 const fileExists = require('file-exists');
 const sqlite = require('better-sqlite3');
 const compare = require('node-version-compare');
@@ -307,13 +307,6 @@ class App {
             let account = passwordData[1];
             let retrievedPassword = '';
 
-            if(passwordSafeStorage) {
-                retrievedPassword = await passwordSafeStorage.getPassword(service, account);
-            }
-
-            if (retrievedPassword === null || retrievedPassword === true || retrievedPassword === false) {
-                retrievedPassword = '';
-            }
 
             return retrievedPassword;
         }

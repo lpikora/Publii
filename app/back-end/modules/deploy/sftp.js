@@ -6,7 +6,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const md5 = require('md5');
 const sftpClient = require('ssh2-sftp-client');
-const passwordSafeStorage = require('keytar');
+// const passwordSafeStorage = require('keytar');
 const slug = require('./../../helpers/slug');
 const normalizePath = require('normalize-path');
 
@@ -25,13 +25,13 @@ class SFTP {
 
         this.connection = new sftpClient();
 
-        if(ftpPassword === 'publii ' + account) {
-            ftpPassword = await passwordSafeStorage.getPassword('publii', account);
-        }
+        // if(ftpPassword === 'publii ' + account) {
+        //     ftpPassword = await passwordSafeStorage.getPassword('publii', account);
+        // }
 
-        if(passphrase === 'publii-passphrase ' + account) {
-            passphrase = await passwordSafeStorage.getPassword('publii-passphrase', account);
-        }
+        // if(passphrase === 'publii-passphrase ' + account) {
+        //     passphrase = await passwordSafeStorage.getPassword('publii-passphrase', account);
+        // }
 
         let connectionSettings = {
             host: this.deployment.siteConfig.deployment.server,

@@ -4,7 +4,6 @@
 
 const fs = require('fs-extra');
 const path = require('path');
-const passwordSafeStorage = require('keytar');
 const slug = require('./../../helpers/slug');
 const Gitlab = require('gitlab/dist/es5').default
 const list = require('ls-all');
@@ -46,9 +45,6 @@ class GitlabPages {
         let account = slug(siteName);
         this.waitForTimeout = true;
 
-        if (token === 'publii-gl-token ' + account) {
-            token = await passwordSafeStorage.getPassword('publii-gl-token', account);
-        }
 
         this.client = new Gitlab({
             url: deploymentConfig.gitlab.server,
@@ -140,10 +136,6 @@ class GitlabPages {
         this.waitForTimeout = true;
         let token = this.deployment.siteConfig.deployment.gitlab.token;
         let account = slug(this.deployment.siteConfig.name);
-
-        if (token === 'publii-gl-token ' + account) {
-            token = await passwordSafeStorage.getPassword('publii-gl-token', account);
-        }
 
         this.client = new Gitlab({
             url: this.deployment.siteConfig.deployment.gitlab.server,

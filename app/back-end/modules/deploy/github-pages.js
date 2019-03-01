@@ -4,7 +4,6 @@
 
 const fs = require('fs-extra');
 const path = require('path');
-const passwordSafeStorage = require('keytar');
 const slug = require('./../../helpers/slug');
 const githubApi = require("github");
 const list = require('ls-all');
@@ -47,10 +46,6 @@ class GithubPages {
         this.parallelOperations = parseInt(this.deployment.siteConfig.deployment.github.parallelOperations, 10);
         this.waitForTimeout = true;
         let account = slug(this.deployment.siteConfig.name);
-
-        if (this.token === 'publii-gh-token ' + account) {
-            this.token = await passwordSafeStorage.getPassword('publii-gh-token', account);
-        }
 
         this.client.authenticate({
             type: "token",
@@ -158,9 +153,6 @@ class GithubPages {
         let account = slug(siteName);
         this.waitForTimeout = true;
 
-        if(token === 'publii-gh-token ' + account) {
-            token = await passwordSafeStorage.getPassword('publii-gh-token', account);
-        }
 
         this.client.authenticate({
             type: "token",

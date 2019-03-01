@@ -6,7 +6,6 @@ const fs = require('fs-extra');
 const path = require('path');
 const md5 = require('md5');
 const ftpClient = require('./../custom-changes/ftp');
-const passwordSafeStorage = require('keytar');
 const slug = require('./../../helpers/slug');
 const normalizePath = require('normalize-path');
 
@@ -29,10 +28,6 @@ class FTP {
         let secureConnection = false;
 
         this.connection = new ftpClient();
-
-        if(ftpPassword === 'publii ' + account) {
-            ftpPassword = await passwordSafeStorage.getPassword('publii', account);
-        }
 
         if(this.deployment.siteConfig.deployment.protocol !== 'ftp') {
             secureConnection = 'control';
@@ -452,9 +447,6 @@ class FTP {
         let account = slug(siteName);
         let secureConnection = false;
 
-        if(ftpPassword === 'publii ' + account) {
-            ftpPassword = await passwordSafeStorage.getPassword('publii', account);
-        }
 
         if(deploymentConfig.protocol !== 'ftp') {
             secureConnection = 'control';
